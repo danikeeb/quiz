@@ -743,21 +743,16 @@
 var currentSection = 0;
 var totalSections = 7;
 
-// Init option clicks
-document.querySelectorAll('.q-option').forEach(function(opt) {
-  opt.addEventListener('click', function() {
-    var input = this.querySelector('input');
-    var isCheckbox = input.type === 'checkbox';
-    if (isCheckbox) {
-      input.checked = !input.checked;
-      this.classList.toggle('selected', input.checked);
+// Init option clicks — используем change на input чтобы избежать двойного срабатывания
+document.querySelectorAll('.q-option input').forEach(function(input) {
+  input.addEventListener('change', function() {
+    if (this.type === 'checkbox') {
+      this.closest('.q-option').classList.toggle('selected', this.checked);
     } else {
-      var name = input.name;
-      document.querySelectorAll('input[name="' + name + '"]').forEach(function(r) {
+      document.querySelectorAll('input[name="' + this.name + '"]').forEach(function(r) {
         r.closest('.q-option').classList.remove('selected');
       });
-      input.checked = true;
-      this.classList.add('selected');
+      this.closest('.q-option').classList.add('selected');
     }
   });
 });
