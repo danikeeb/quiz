@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Почему ты тренируешься, но не видишь результата? — Даня keeb</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:     #0F0F0F;
+      --bg2:    #161616;
+      --bg3:    #1E1E1E;
+      --gold:   #C9A96E;
+      --white:  #FFFFFF;
+      --grey:   #A0A0A0;
+      --grey2:  #6A6A6A;
+      --border: rgba(201,169,110,0.15);
+    }
+    html, body { overflow-x: hidden; }
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .quiz-header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(15,15,15,0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(201,169,110,0.1);
+      padding: 0 24px;
+    }
+    .quiz-header-inner {
+      max-width: 680px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .quiz-logo { font-size: 16px; font-weight: 800; color: var(--white); text-decoration: none; }
+    .quiz-logo span { color: var(--gold); }
+
+    /* ── PROGRESS ── */
+    .progress-wrap { padding: 0 24px; background: var(--bg); }
+    .progress-inner { max-width: 680px; margin: 0 auto; padding: 16px 0 0; }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: var(--grey2); margin-bottom: 8px;
+    }
+    .progress-bar-bg {
+      width: 100%; height: 4px;
+      background: var(--bg3); border-radius: 4px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; background: var(--gold);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    /* ── MAIN ── */
+    .quiz-main { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ── INTRO ── */
+    .quiz-intro { text-align: center; padding: 20px 0 48px; }
+    .quiz-intro .tag {
+      display: inline-block;
+      background: rgba(201,169,110,0.12);
+      color: var(--gold);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 5px 14px; margin-bottom: 20px;
+    }
+    .quiz-intro h1 {
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 800; line-height: 1.15;
+      letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .quiz-intro h1 em { font-style: normal; color: var(--gold); }
+    .quiz-intro p {
+      font-size: 16px; color: var(--grey);
+      line-height: 1.75; max-width: 560px; margin: 0 auto 32px;
+    }
+    .quiz-meta {
+      display: flex; gap: 24px; justify-content: center; flex-wrap: wrap;
+      font-size: 13px; color: var(--grey2); margin-bottom: 36px;
+    }
+    .quiz-meta span { display: flex; align-items: center; gap: 6px; }
+
+    /* ── SECTION ── */
+    .quiz-section { display: none; }
+    .quiz-section.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .section-heading {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 28px; padding-bottom: 12px;
+      border-bottom: 1px solid rgba(201,169,110,0.12);
+    }
+
+    .section-intro {
+      background: var(--bg2);
+      border: 1px solid rgba(201,169,110,0.12);
+      border-radius: 16px;
+      padding: 20px 22px;
+      margin-bottom: 32px;
+      font-size: 14px; color: var(--grey); line-height: 1.7;
+    }
+    .section-intro strong { color: var(--white); }
+
+    /* ── QUESTION ── */
+    .question { margin-bottom: 32px; }
+    .question-label {
+      font-size: 16px; font-weight: 700; color: var(--white);
+      line-height: 1.4; margin-bottom: 14px;
+    }
+    .question-label .q-num {
+      color: var(--gold); opacity: 0.5; font-size: 12px;
+      font-weight: 600; display: block; margin-bottom: 4px;
+    }
+    .required-star { color: var(--gold); margin-left: 3px; }
+
+    /* ── TEXT INPUT ── */
+    .q-input, .q-textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      color: var(--white);
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .q-input:focus, .q-textarea:focus { border-color: var(--gold); }
+    .q-input::placeholder, .q-textarea::placeholder { color: var(--grey2); }
+    .q-textarea { min-height: 110px; }
+    .q-textarea.tall { min-height: 200px; }
+
+    /* ── RADIO / CHECKBOX ── */
+    .q-options { display: flex; flex-direction: column; gap: 10px; }
+    .q-option {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg2);
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      user-select: none;
+    }
+    .q-option:hover { border-color: rgba(201,169,110,0.3); background: var(--bg3); }
+    .q-option input { display: none; }
+    .q-option-marker {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 2px solid #3a3a3a;
+      border-radius: 50%;
+      margin-top: 1px;
+      transition: border-color 0.2s, background 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .q-option.checkbox .q-option-marker { border-radius: 6px; }
+    .q-option.selected { border-color: var(--gold); background: rgba(201,169,110,0.06); }
+    .q-option.selected .q-option-marker {
+      border-color: var(--gold); background: var(--gold);
+    }
+    .q-option.selected .q-option-marker::after {
+      content: '';
+      display: block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #0F0F0F;
+    }
+    .q-option.checkbox.selected .q-option-marker::after {
+      width: 5px; height: 9px;
+      border-radius: 0;
+      background: transparent;
+      border-right: 2px solid #0F0F0F;
+      border-bottom: 2px solid #0F0F0F;
+      transform: rotate(45deg) translate(-1px, -1px);
+    }
+    .q-option-text { font-size: 14px; color: var(--grey); line-height: 1.45; padding-top: 1px; }
+    .q-option.selected .q-option-text { color: var(--white); }
+
+    /* ── SCALE ── */
+    .q-scale { display: flex; gap: 8px; flex-wrap: wrap; }
+    .q-scale-btn {
+      width: 48px; height: 48px;
+      background: var(--bg2);
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      color: var(--grey);
+      font-size: 15px; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .q-scale-btn:hover { border-color: rgba(201,169,110,0.4); color: var(--white); }
+    .q-scale-btn.selected { border-color: var(--gold); background: rgba(201,169,110,0.12); color: var(--gold); }
+    .q-scale-labels {
+      display: flex; justify-content: space-between;
+      font-size: 11px; color: var(--grey2); margin-top: 6px;
+    }
+
+    /* ── HINT ── */
+    .q-hint {
+      font-size: 12px; color: var(--grey2);
+      background: var(--bg3); border-radius: 8px;
+      padding: 10px 14px; margin-top: 10px;
+      line-height: 1.5;
+    }
+    .q-hint strong { color: var(--gold); }
+
+    /* ── BUTTONS ── */
+    .quiz-nav {
+      display: flex; gap: 12px; margin-top: 40px;
+      justify-content: space-between; align-items: center;
+    }
+    .btn-next, .btn-prev, .btn-submit {
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px; font-weight: 700;
+      padding: 15px 36px; border-radius: 100px;
+      cursor: pointer; border: none;
+      transition: all 0.2s;
+    }
+    .btn-next, .btn-submit {
+      background: var(--gold); color: #0F0F0F;
+    }
+    .btn-next:hover, .btn-submit:hover {
+      background: #D4B07A; transform: translateY(-1px);
+    }
+    .btn-prev {
+      background: transparent; color: var(--grey);
+      border: 1px solid #333;
+    }
+    .btn-prev:hover { border-color: #555; color: var(--white); }
+
+    /* ── THANK YOU ── */
+    .quiz-thanks { display: none; text-align: center; padding: 40px 0; }
+    .quiz-thanks.show { display: block; animation: fadeIn 0.4s ease; }
+    .thanks-icon { font-size: 56px; margin-bottom: 20px; }
+    .quiz-thanks h2 { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+    .quiz-thanks p { font-size: 15px; color: var(--grey); line-height: 1.75; max-width: 500px; margin: 0 auto 12px; }
+    .quiz-thanks .highlight {
+      background: rgba(201,169,110,0.08);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 16px; padding: 20px 24px;
+      margin: 24px 0; font-size: 14px; color: var(--grey);
+      line-height: 1.7; text-align: left;
+    }
+    .quiz-thanks .highlight strong { color: var(--white); }
+    .quiz-thanks .btn-tg {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold); color: #0F0F0F;
+      font-family: 'Manrope', sans-serif;
+      font-size: 15px; font-weight: 700;
+      padding: 16px 36px; border-radius: 100px;
+      text-decoration: none; margin-top: 8px;
+      transition: all 0.2s;
+    }
+    .quiz-thanks .btn-tg:hover { background: #D4B07A; transform: translateY(-2px); }
+
+    @media (max-width: 480px) {
+      .quiz-main { padding: 28px 16px 60px; }
+      .quiz-header { padding: 0 16px; }
+      .progress-wrap { padding: 0 16px; }
+      .q-scale { gap: 6px; }
+      .q-scale-btn { width: 40px; height: 40px; font-size: 14px; }
+      .btn-next, .btn-submit { padding: 14px 28px; font-size: 14px; }
+      .quiz-nav { flex-direction: column-reverse; }
+      .btn-prev, .btn-next, .btn-submit { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+<!-- Netlify Forms detection (hidden) -->
+<form name="quiz" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="quiz">
+  <input name="bot-field"><input name="q1_name"><input name="q2_age"><input name="q3_job">
+  <input name="q4_activity"><input name="q5_type"><input name="q6_duration"><input name="q7_result">
+  <textarea name="q8_explain"></textarea><textarea name="q9_mirror"></textarea>
+  <input name="q10_clothes"><input name="q11_photo"><textarea name="q12_feeling"></textarea>
+  <input name="q13_avoid"><textarea name="q14_change"></textarea><textarea name="q15_wish"></textarea>
+  <input name="q16_monday"><input name="q17_choice"><input name="q18_blocks">
+  <textarea name="q19_fail"></textarea><textarea name="q20_postpone"></textarea>
+  <input name="q21_goals"><input name="q22_time"><input name="q23_format"><input name="q24_confidence">
+  <input name="q25_know"><input name="q26_yoga"><input name="q27_combo"><input name="q28_around">
+  <textarea name="q29_diff"></textarea><textarea name="q30_vision"></textarea>
+  <input name="q31_invest"><input name="q32_dob"><input name="q33_contact"><input name="q34_time">
+</form>
+
+<header class="quiz-header">
+  <div class="quiz-header-inner">
+    <span class="quiz-logo">Даня <span>keeb</span></span>
+    <span style="font-size:13px;color:var(--grey2);">Анкета · 34 вопроса</span>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-label">
+      <span id="progressText">Блок 1 из 7</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+  </div>
+</div>
+
+<main class="quiz-main">
+
+  <!-- ── INTRO ── -->
+  <div class="quiz-section active" id="section-0">
+    <div class="quiz-intro">
+      <div class="tag">Анкета от Даня keeb</div>
+      <h1>Почему ты тренируешься,<br>но не видишь <em>результата?</em></h1>
+      <p>Сегодня 5 мая. До лета — меньше месяца. До отпуска, пляжа, открытых платьев и фотографий, которые ты захочешь сохранить, а не удалить — ещё чуть-чуть.</p>
+      <p>Эта анкета — не просто опрос. Это <strong style="color:var(--white)">7 минут честности с собой</strong>. Ответь вдумчиво — и ты сама поймёшь, почему предыдущие «начну с понедельника» не сработали, и что нужно сделать прямо сейчас.</p>
+      <div class="quiz-meta">
+        <span>⏱ 7–9 минут</span>
+        <span>📋 34 вопроса</span>
+        <span>🔒 Без осуждения</span>
+      </div>
+      <button class="btn-next" onclick="goNext()">Начать анкету →</button>
+    </div>
+  </div>
+
+  <!-- ── ФОРМА ── -->
+  <form name="quiz" id="quizForm" onsubmit="handleSubmit(event)">
+    <input type="hidden" name="access_key" value="d63ad8f3-a583-4684-8107-8c955fe2a8f0">
+    <input type="hidden" name="subject" value="📋 Новый ответ на анкету — Даня keeb">
+    <input type="hidden" name="from_name" value="Анкета keebteachyou.fit">
+    <input type="hidden" name="botcheck" style="display:none">
+
+    <!-- БЛОК 1 — Знакомство -->
+    <div class="quiz-section" id="section-1">
+      <div class="section-heading">Блок 1 · Знакомство</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 1</span>Как тебя зовут?<span class="required-star">*</span></div>
+        <input type="text" name="q1_name" class="q-input" placeholder="Твоё имя" required>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 2</span>Сколько тебе лет?</div>
+        <div class="q-options" data-type="radio" data-name="q2_age">
+          <label class="q-option"><input type="radio" name="q2_age" value="20–22"><span class="q-option-marker"></span><span class="q-option-text">20–22</span></label>
+          <label class="q-option"><input type="radio" name="q2_age" value="23–25"><span class="q-option-marker"></span><span class="q-option-text">23–25</span></label>
+          <label class="q-option"><input type="radio" name="q2_age" value="26–28"><span class="q-option-marker"></span><span class="q-option-text">26–28</span></label>
+          <label class="q-option"><input type="radio" name="q2_age" value="29–30"><span class="q-option-marker"></span><span class="q-option-text">29–30</span></label>
+          <label class="q-option"><input type="radio" name="q2_age" value="Другое"><span class="q-option-marker"></span><span class="q-option-text">Другое</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 3</span>Чем ты занимаешься в жизни?</div>
+        <input type="text" name="q3_job" class="q-input" placeholder="Работа, учёба, материнство — что угодно">
+      </div>
+
+      <div class="quiz-nav">
+        <span></span>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 2 — Текущая реальность -->
+    <div class="quiz-section" id="section-2">
+      <div class="section-heading">Блок 2 · Текущая реальность</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 4</span>Занимаешься ли ты сейчас какой-либо физической активностью?</div>
+        <div class="q-options" data-type="radio" data-name="q4_activity">
+          <label class="q-option"><input type="radio" name="q4_activity" value="Да, регулярно (3+ раза в неделю)"><span class="q-option-marker"></span><span class="q-option-text">Да, регулярно (3+ раза в неделю)</span></label>
+          <label class="q-option"><input type="radio" name="q4_activity" value="Да, но нерегулярно (1–2 раза в неделю)"><span class="q-option-marker"></span><span class="q-option-text">Да, но нерегулярно (1–2 раза в неделю или «когда получится»)</span></label>
+          <label class="q-option"><input type="radio" name="q4_activity" value="Раньше занималась, сейчас в паузе"><span class="q-option-marker"></span><span class="q-option-text">Раньше занималась, сейчас в паузе</span></label>
+          <label class="q-option"><input type="radio" name="q4_activity" value="Нет, но давно хочу начать"><span class="q-option-marker"></span><span class="q-option-text">Нет, но давно хочу начать</span></label>
+          <label class="q-option"><input type="radio" name="q4_activity" value="Нет, и пока не уверена"><span class="q-option-marker"></span><span class="q-option-text">Нет, и пока не уверена, нужно ли мне это</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 5</span>Если занимаешься — какой вид активности у тебя сейчас основной?</div>
+        <div class="q-options" data-type="checkbox" data-name="q5_type">
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Йога / пилатес / стретчинг"><span class="q-option-marker"></span><span class="q-option-text">Йога / пилатес / стретчинг</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Бег, кардио, ходьба"><span class="q-option-marker"></span><span class="q-option-text">Бег, кардио, ходьба</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Тренажёрный зал (силовые)"><span class="q-option-marker"></span><span class="q-option-text">Тренажёрный зал (силовые)</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Групповые занятия (танцы, аэробика, боевые)"><span class="q-option-marker"></span><span class="q-option-text">Групповые занятия (танцы, аэробика, боевые)</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Домашние тренировки по видео"><span class="q-option-marker"></span><span class="q-option-text">Домашние тренировки по видео</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q5_type" value="Другое"><span class="q-option-marker"></span><span class="q-option-text">Другое</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 6</span>Как давно ты занимаешься этой активностью?</div>
+        <div class="q-options" data-type="radio" data-name="q6_duration">
+          <label class="q-option"><input type="radio" name="q6_duration" value="Меньше 3 месяцев"><span class="q-option-marker"></span><span class="q-option-text">Меньше 3 месяцев</span></label>
+          <label class="q-option"><input type="radio" name="q6_duration" value="3–6 месяцев"><span class="q-option-marker"></span><span class="q-option-text">3–6 месяцев</span></label>
+          <label class="q-option"><input type="radio" name="q6_duration" value="6–12 месяцев"><span class="q-option-marker"></span><span class="q-option-text">6–12 месяцев</span></label>
+          <label class="q-option"><input type="radio" name="q6_duration" value="1–2 года"><span class="q-option-marker"></span><span class="q-option-text">1–2 года</span></label>
+          <label class="q-option"><input type="radio" name="q6_duration" value="Больше 2 лет"><span class="q-option-marker"></span><span class="q-option-text">Больше 2 лет</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 7</span>Видишь ли ты тот результат, который хотела увидеть?</div>
+        <div class="q-options" data-type="radio" data-name="q7_result">
+          <label class="q-option"><input type="radio" name="q7_result" value="Да, полностью довольна"><span class="q-option-marker"></span><span class="q-option-text">Да, полностью довольна</span></label>
+          <label class="q-option"><input type="radio" name="q7_result" value="Частично — что-то получилось, но не всё"><span class="q-option-marker"></span><span class="q-option-text">Частично — что-то получилось, но не всё</span></label>
+          <label class="q-option"><input type="radio" name="q7_result" value="Нет, результата почти нет"><span class="q-option-marker"></span><span class="q-option-text">Нет, результата почти нет</span></label>
+          <label class="q-option"><input type="radio" name="q7_result" value="Я уже не помню, какого результата хотела"><span class="q-option-marker"></span><span class="q-option-text">Я уже не помню, какого результата хотела изначально</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 8</span>Если результата нет — как ты сама себе это объясняешь?</div>
+        <textarea name="q8_explain" class="q-textarea" placeholder="Напиши честно..."></textarea>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 3 — Зеркало -->
+    <div class="quiz-section" id="section-3">
+      <div class="section-heading">Блок 3 · Зеркало</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 9</span>Когда ты смотришь на себя в зеркало утром — что ты чувствуешь?<span class="required-star">*</span></div>
+        <textarea name="q9_mirror" class="q-textarea" placeholder="Напиши честно — здесь нет правильного или неправильного ответа..." required></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 10</span>Есть ли у тебя одежда в шкафу, которую ты не носишь, потому что «не та форма»?</div>
+        <div class="q-options" data-type="radio" data-name="q10_clothes">
+          <label class="q-option"><input type="radio" name="q10_clothes" value="Да, и довольно много"><span class="q-option-marker"></span><span class="q-option-text">Да, и довольно много</span></label>
+          <label class="q-option"><input type="radio" name="q10_clothes" value="Есть пара вещей"><span class="q-option-marker"></span><span class="q-option-text">Есть пара вещей</span></label>
+          <label class="q-option"><input type="radio" name="q10_clothes" value="Нет, ношу всё что есть"><span class="q-option-marker"></span><span class="q-option-text">Нет, ношу всё что есть</span></label>
+          <label class="q-option"><input type="radio" name="q10_clothes" value="Стараюсь об этом не думать"><span class="q-option-marker"></span><span class="q-option-text">Стараюсь об этом не думать</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 11</span>Когда ты в последний раз фотографировалась и тебе НЕ хотелось удалить фото?</div>
+        <div class="q-options" data-type="radio" data-name="q11_photo">
+          <label class="q-option"><input type="radio" name="q11_photo" value="На прошлой неделе / недавно"><span class="q-option-marker"></span><span class="q-option-text">На прошлой неделе / недавно</span></label>
+          <label class="q-option"><input type="radio" name="q11_photo" value="Несколько месяцев назад"><span class="q-option-marker"></span><span class="q-option-text">Несколько месяцев назад</span></label>
+          <label class="q-option"><input type="radio" name="q11_photo" value="Больше полугода назад"><span class="q-option-marker"></span><span class="q-option-text">Больше полугода назад</span></label>
+          <label class="q-option"><input type="radio" name="q11_photo" value="Уже не помню, если честно"><span class="q-option-marker"></span><span class="q-option-text">Уже не помню, если честно</span></label>
+          <label class="q-option"><input type="radio" name="q11_photo" value="Я вообще избегаю фотографироваться"><span class="q-option-marker"></span><span class="q-option-text">Я вообще избегаю фотографироваться</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 12</span>Ты видишь девушку с красивой, подтянутой фигурой — что ты обычно чувствуешь в этот момент?</div>
+        <textarea name="q12_feeling" class="q-textarea" placeholder="Честный ответ..."></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 13</span>Есть ли ситуации, которых ты избегаешь из-за того, как сейчас выглядит твоё тело?</div>
+        <div class="q-options" data-type="checkbox" data-name="q13_avoid">
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Пляж, бассейн, сауна"><span class="q-option-marker"></span><span class="q-option-text">Пляж, бассейн, сауна</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Примерочные в магазинах"><span class="q-option-marker"></span><span class="q-option-text">Примерочные в магазинах</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Фотосессии, видеосъёмки"><span class="q-option-marker"></span><span class="q-option-text">Фотосессии, видеосъёмки</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Близость с партнёром при свете"><span class="q-option-marker"></span><span class="q-option-text">Близость с партнёром при свете</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Встречи с подругами, которые «в форме»"><span class="q-option-marker"></span><span class="q-option-text">Встречи с подругами, которые «в форме»</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Покупка облегающей одежды"><span class="q-option-marker"></span><span class="q-option-text">Покупка облегающей одежды</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Никаких — я свободно себя чувствую везде"><span class="q-option-marker"></span><span class="q-option-text">Никаких — я свободно себя чувствую везде</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q13_avoid" value="Другое"><span class="q-option-marker"></span><span class="q-option-text">Другое</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 14</span>Если бы ты могла прямо сейчас изменить в своём теле одну вещь — что бы это было? И что изменилось бы в твоей жизни?</div>
+        <textarea name="q14_change" class="q-textarea" placeholder="Напиши..."></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 15</span>Закончи фразу: «Я бы хотела, чтобы моё тело…»</div>
+        <textarea name="q15_wish" class="q-textarea" placeholder="..."></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 16</span>Как часто за последний месяц ты говорила себе «начну с понедельника»?</div>
+        <div class="q-options" data-type="radio" data-name="q16_monday">
+          <label class="q-option"><input type="radio" name="q16_monday" value="Ни разу — я уже занимаюсь"><span class="q-option-marker"></span><span class="q-option-text">Ни разу — я уже занимаюсь</span></label>
+          <label class="q-option"><input type="radio" name="q16_monday" value="1–2 раза"><span class="q-option-marker"></span><span class="q-option-text">1–2 раза</span></label>
+          <label class="q-option"><input type="radio" name="q16_monday" value="Почти каждую неделю"><span class="q-option-marker"></span><span class="q-option-text">Почти каждую неделю</span></label>
+          <label class="q-option"><input type="radio" name="q16_monday" value="Это моя постоянная мантра, если честно"><span class="q-option-marker"></span><span class="q-option-text">Это моя постоянная мантра, если честно</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 17</span>Сейчас 5 мая. До июня — меньше 30 дней. Если начнёшь сегодня — к августу тело реально изменится. Если продолжишь откладывать — это будет ещё одно лето в парео. Какое лето ты выбираешь?</div>
+        <div class="q-options" data-type="radio" data-name="q17_choice">
+          <label class="q-option"><input type="radio" name="q17_choice" value="Хочу впервые за долгое время чувствовать себя свободно — в купальнике, на пляже, на фото"><span class="q-option-marker"></span><span class="q-option-text">Хочу впервые за долгое время чувствовать себя свободно — в купальнике, на пляже, на фото</span></label>
+          <label class="q-option"><input type="radio" name="q17_choice" value="Готова к переменам, но боюсь, что не успею за такой срок"><span class="q-option-marker"></span><span class="q-option-text">Готова к переменам, но боюсь, что не успею за такой срок</span></label>
+          <label class="q-option"><input type="radio" name="q17_choice" value="Понимаю, что 8 недель — это реально, и хочу попробовать"><span class="q-option-marker"></span><span class="q-option-text">Понимаю, что 8 недель — это реально, и хочу попробовать</span></label>
+          <label class="q-option"><input type="radio" name="q17_choice" value="Опять отложу до следующего года"><span class="q-option-marker"></span><span class="q-option-text">Опять отложу до следующего года (честный ответ)</span></label>
+        </div>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 4 — Что мешает -->
+    <div class="quiz-section" id="section-4">
+      <div class="section-heading">Блок 4 · Что мешает</div>
+      <div class="section-intro">
+        <strong>Спасибо, что отвечаешь честно.</strong> Я знаю, эти вопросы непростые. Но именно в этих ответах — ключ к тому, почему ты до сих пор не там, где хочешь быть. Дальше будет легче — поговорим о том, что конкретно мешает, и что с этим делать.
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 18</span>Что именно останавливает тебя начать тренироваться системно?</div>
+        <div class="q-options" data-type="checkbox" data-name="q18_blocks">
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Нет времени"><span class="q-option-marker"></span><span class="q-option-text">Нет времени</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Нет денег на тренера/абонемент"><span class="q-option-marker"></span><span class="q-option-text">Нет денег на тренера/абонемент</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Не знаю, с чего начать"><span class="q-option-marker"></span><span class="q-option-text">Не знаю, с чего начать</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Стесняюсь зала / своего тела сейчас"><span class="q-option-marker"></span><span class="q-option-text">Стесняюсь зала / своего тела сейчас</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Боюсь «перекачаться»"><span class="q-option-marker"></span><span class="q-option-text">Боюсь «перекачаться» и стать «мужеподобной»</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Нет мотивации / быстро бросаю"><span class="q-option-marker"></span><span class="q-option-text">Нет мотивации / быстро бросаю</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Думаю, что йоги/кардио мне достаточно"><span class="q-option-marker"></span><span class="q-option-text">Думаю, что йоги/кардио мне достаточно</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Уже пробовала — не получилось"><span class="q-option-marker"></span><span class="q-option-text">Уже пробовала — не получилось</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q18_blocks" value="Другое"><span class="q-option-marker"></span><span class="q-option-text">Другое</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 19</span>Опиши свой типичный «провал»: ты начинаешь тренироваться, и что происходит дальше?</div>
+        <textarea name="q19_fail" class="q-textarea" placeholder="Через сколько и почему ты бросаешь?"></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 20</span>Готова ли ты продолжать откладывать себя «на потом» ещё год? Через год тебе будет на год больше — а тело будет тем же. Что ты чувствуешь, читая это?<span class="required-star">*</span></div>
+        <textarea name="q20_postpone" class="q-textarea" placeholder="Напиши честно..." required></textarea>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 5 — Цели и готовность -->
+    <div class="quiz-section" id="section-5">
+      <div class="section-heading">Блок 5 · Цели и готовность</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 21</span>Какой результат ты хочешь получить от тренировок в ближайшие 3–6 месяцев?</div>
+        <div class="q-options" data-type="checkbox" data-name="q21_goals">
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Снизить процент жира, увидеть рельеф"><span class="q-option-marker"></span><span class="q-option-text">Снизить процент жира, увидеть рельеф</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Набрать мышечную массу в нужных местах"><span class="q-option-marker"></span><span class="q-option-text">Набрать мышечную массу в нужных местах (ягодицы, спина, плечи)</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Стать сильнее и выносливее"><span class="q-option-marker"></span><span class="q-option-text">Стать сильнее и выносливее</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Улучшить осанку и убрать боли в спине"><span class="q-option-marker"></span><span class="q-option-text">Улучшить осанку и убрать боли в спине</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Чувствовать себя уверенно в зеркале и на пляже"><span class="q-option-marker"></span><span class="q-option-text">Чувствовать себя уверенно в зеркале и на пляже</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Тренироваться системно и перестать откладывать"><span class="q-option-marker"></span><span class="q-option-text">Перестать «начинать с понедельника» и тренироваться системно</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Подтянуть тело после родов / похудения / перерыва"><span class="q-option-marker"></span><span class="q-option-text">Подтянуть тело после родов / похудения / долгого перерыва</span></label>
+          <label class="q-option checkbox"><input type="checkbox" name="q21_goals" value="Другое"><span class="q-option-marker"></span><span class="q-option-text">Другое</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 22</span>Сколько времени в неделю ты реально готова уделять тренировкам?</div>
+        <div class="q-options" data-type="radio" data-name="q22_time">
+          <label class="q-option"><input type="radio" name="q22_time" value="2 часа"><span class="q-option-marker"></span><span class="q-option-text">2 часа</span></label>
+          <label class="q-option"><input type="radio" name="q22_time" value="3–4 часа"><span class="q-option-marker"></span><span class="q-option-text">3–4 часа</span></label>
+          <label class="q-option"><input type="radio" name="q22_time" value="5–6 часов"><span class="q-option-marker"></span><span class="q-option-text">5–6 часов</span></label>
+          <label class="q-option"><input type="radio" name="q22_time" value="Больше 6 часов"><span class="q-option-marker"></span><span class="q-option-text">Больше 6 часов</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 23</span>Что для тебя важнее прямо сейчас?</div>
+        <div class="q-options" data-type="radio" data-name="q23_format">
+          <label class="q-option"><input type="radio" name="q23_format" value="Онлайн-ведение — заниматься самой по плану"><span class="q-option-marker"></span><span class="q-option-text">Заниматься самой по плану, который мне составят (онлайн-ведение)</span></label>
+          <label class="q-option"><input type="radio" name="q23_format" value="Лично в зале с тренером"><span class="q-option-marker"></span><span class="q-option-text">Заниматься с тренером лично в зале</span></label>
+          <label class="q-option"><input type="radio" name="q23_format" value="Комбинированный — план + личные встречи"><span class="q-option-marker"></span><span class="q-option-text">Комбинировать — план + периодические личные встречи</span></label>
+          <label class="q-option"><input type="radio" name="q23_format" value="Пока просто разобраться, что мне подходит"><span class="q-option-marker"></span><span class="q-option-text">Пока просто разобраться, что мне подходит</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 24</span>Если бы у тебя был чёткий план и поддержка тренера — насколько вероятно, что через 3 месяца ты увидишь результат? (1 — маловероятно, 10 — уверена)</div>
+        <div class="q-scale" id="scale24">
+          <button type="button" class="q-scale-btn" data-val="1" onclick="selectScale(this,'q24_confidence')">1</button>
+          <button type="button" class="q-scale-btn" data-val="2" onclick="selectScale(this,'q24_confidence')">2</button>
+          <button type="button" class="q-scale-btn" data-val="3" onclick="selectScale(this,'q24_confidence')">3</button>
+          <button type="button" class="q-scale-btn" data-val="4" onclick="selectScale(this,'q24_confidence')">4</button>
+          <button type="button" class="q-scale-btn" data-val="5" onclick="selectScale(this,'q24_confidence')">5</button>
+          <button type="button" class="q-scale-btn" data-val="6" onclick="selectScale(this,'q24_confidence')">6</button>
+          <button type="button" class="q-scale-btn" data-val="7" onclick="selectScale(this,'q24_confidence')">7</button>
+          <button type="button" class="q-scale-btn" data-val="8" onclick="selectScale(this,'q24_confidence')">8</button>
+          <button type="button" class="q-scale-btn" data-val="9" onclick="selectScale(this,'q24_confidence')">9</button>
+          <button type="button" class="q-scale-btn" data-val="10" onclick="selectScale(this,'q24_confidence')">10</button>
+        </div>
+        <div class="q-scale-labels"><span>Маловероятно</span><span>Абсолютно уверена</span></div>
+        <input type="hidden" name="q24_confidence" id="q24_confidence">
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 6 — Знания -->
+    <div class="quiz-section" id="section-6">
+      <div class="section-heading">Блок 6 · Знания и заблуждения</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 25</span>Знала ли ты, что только силовые тренировки перестраивают организм на биологическом уровне — меняют гормональный фон, плотность костей и метаболизм даже в покое? Кардио и йога этого не дают.</div>
+        <div class="q-options" data-type="radio" data-name="q25_know">
+          <label class="q-option"><input type="radio" name="q25_know" value="Да, знала и понимаю"><span class="q-option-marker"></span><span class="q-option-text">Да, знала и понимаю</span></label>
+          <label class="q-option"><input type="radio" name="q25_know" value="Слышала, но не вникала"><span class="q-option-marker"></span><span class="q-option-text">Слышала, но не вникала</span></label>
+          <label class="q-option"><input type="radio" name="q25_know" value="Нет, для меня это новость"><span class="q-option-marker"></span><span class="q-option-text">Нет, для меня это новость</span></label>
+          <label class="q-option"><input type="radio" name="q25_know" value="Не верю / сомневаюсь"><span class="q-option-marker"></span><span class="q-option-text">Не верю / сомневаюсь</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 26</span>Если ты занимаешься йогой — замечала ли ты, что сложные асаны даются тяжело именно из-за нехватки силы, а не гибкости?</div>
+        <div class="q-options" data-type="radio" data-name="q26_yoga">
+          <label class="q-option"><input type="radio" name="q26_yoga" value="Да, постоянно с этим сталкиваюсь"><span class="q-option-marker"></span><span class="q-option-text">Да, постоянно с этим сталкиваюсь</span></label>
+          <label class="q-option"><input type="radio" name="q26_yoga" value="Иногда замечаю"><span class="q-option-marker"></span><span class="q-option-text">Иногда замечаю</span></label>
+          <label class="q-option"><input type="radio" name="q26_yoga" value="Нет, для меня это не проблема"><span class="q-option-marker"></span><span class="q-option-text">Нет, для меня это не проблема</span></label>
+          <label class="q-option"><input type="radio" name="q26_yoga" value="Я не занимаюсь йогой"><span class="q-option-marker"></span><span class="q-option-text">Я не занимаюсь йогой</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 27</span>Какая комбинация даёт лучший результат для женского тела — стройность, рельеф, энергия, здоровье?</div>
+        <div class="q-options" data-type="radio" data-name="q27_combo">
+          <label class="q-option"><input type="radio" name="q27_combo" value="Только йога / пилатес"><span class="q-option-marker"></span><span class="q-option-text">Только йога / пилатес</span></label>
+          <label class="q-option"><input type="radio" name="q27_combo" value="Только кардио (бег, ходьба)"><span class="q-option-marker"></span><span class="q-option-text">Только кардио (бег, ходьба)</span></label>
+          <label class="q-option"><input type="radio" name="q27_combo" value="Только силовые в зале"><span class="q-option-marker"></span><span class="q-option-text">Только силовые в зале</span></label>
+          <label class="q-option"><input type="radio" name="q27_combo" value="Силовые как основа + мобильность + кардио в комплексе"><span class="q-option-marker"></span><span class="q-option-text">Силовые как основа + мобильность + кардио в комплексе</span></label>
+          <label class="q-option"><input type="radio" name="q27_combo" value="Не знаю"><span class="q-option-marker"></span><span class="q-option-text">Не знаю</span></label>
+        </div>
+        <div class="q-hint"><strong>Правильный ответ — последний.</strong> Силовой тренинг как фундамент, мобильность для качества движения, кардио для сердца. Только так тело меняется системно.</div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 28</span>Посмотри на людей вокруг в зале или в йога-студии. У скольких из них тело реально изменилось за время занятий?</div>
+        <div class="q-options" data-type="radio" data-name="q28_around">
+          <label class="q-option"><input type="radio" name="q28_around" value="У большинства — да, видно прогресс"><span class="q-option-marker"></span><span class="q-option-text">У большинства — да, видно прогресс</span></label>
+          <label class="q-option"><input type="radio" name="q28_around" value="У некоторых — да, но у большинства нет"><span class="q-option-marker"></span><span class="q-option-text">У некоторых — да, но у большинства нет</span></label>
+          <label class="q-option"><input type="radio" name="q28_around" value="Почти ни у кого, если честно"><span class="q-option-marker"></span><span class="q-option-text">Почти ни у кого, если честно</span></label>
+          <label class="q-option"><input type="radio" name="q28_around" value="Я не обращала внимания"><span class="q-option-marker"></span><span class="q-option-text">Я не обращала внимания</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 29</span>Понимаешь ли ты разницу между «заниматься спортом» и «выглядеть как человек, который занимается спортом»? Что ты об этом думаешь?</div>
+        <textarea name="q29_diff" class="q-textarea" placeholder="Напиши своими словами..."></textarea>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="button" class="btn-next" onclick="goNext()">Дальше →</button>
+      </div>
+    </div>
+
+    <!-- БЛОК 7 — Финал -->
+    <div class="quiz-section" id="section-7">
+      <div class="section-heading">Блок 7 · Финал</div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 30</span>Закрой на секунду глаза. Сейчас начало августа. Ты на море. Последние 12 недель ты тренировалась системно. Опиши себя в этот момент очень детально.<span class="required-star">*</span></div>
+        <div class="q-hint" style="margin-bottom:12px">Что на тебе надето? Как ты себя чувствуешь, когда идёшь к воде? Тебя фотографируют — ты прячешься или позируешь? Что говоришь себе вечером в зеркале отеля? Какой одной фразой ты бы описала эту версию себя?</div>
+        <textarea name="q30_vision" class="q-textarea tall" placeholder="Напиши как можно подробнее — это важно..." required></textarea>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 31</span>Что для тебя сейчас дороже — стоимость тренера или ещё одно лето в парео и закрытом купальнике?</div>
+        <div class="q-options" data-type="radio" data-name="q31_invest">
+          <label class="q-option"><input type="radio" name="q31_invest" value="Ещё одно такое лето я больше не выдержу"><span class="q-option-marker"></span><span class="q-option-text">Ещё одно такое лето я больше не выдержу</span></label>
+          <label class="q-option"><input type="radio" name="q31_invest" value="Готова инвестировать в себя, если будет результат"><span class="q-option-marker"></span><span class="q-option-text">Готова инвестировать в себя, если будет результат</span></label>
+          <label class="q-option"><input type="radio" name="q31_invest" value="Пока не знаю, надо подумать"><span class="q-option-marker"></span><span class="q-option-text">Пока не знаю, надо подумать (но понимаю, что время уходит)</span></label>
+          <label class="q-option"><input type="radio" name="q31_invest" value="Финансово сейчас не готова"><span class="q-option-marker"></span><span class="q-option-text">Финансово сейчас не готова</span></label>
+        </div>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 32</span>Дата рождения (для программы с учётом цикла и возрастных особенностей)</div>
+        <input type="date" name="q32_dob" class="q-input">
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 33</span>Оставь Telegram или Instagram — я лично разберу ответы и пришлю персональные рекомендации бесплатно.<span class="required-star">*</span></div>
+        <input type="text" name="q33_contact" class="q-input" placeholder="@username" required>
+      </div>
+
+      <div class="question">
+        <div class="question-label"><span class="q-num">Вопрос 34</span>Когда тебе удобнее, чтобы я написал тебе в течение 48 часов?</div>
+        <div class="q-options" data-type="radio" data-name="q34_time">
+          <label class="q-option"><input type="radio" name="q34_time" value="Утром (9:00–12:00)"><span class="q-option-marker"></span><span class="q-option-text">Утром (9:00–12:00)</span></label>
+          <label class="q-option"><input type="radio" name="q34_time" value="Днём (12:00–17:00)"><span class="q-option-marker"></span><span class="q-option-text">Днём (12:00–17:00)</span></label>
+          <label class="q-option"><input type="radio" name="q34_time" value="Вечером (17:00–21:00)"><span class="q-option-marker"></span><span class="q-option-text">Вечером (17:00–21:00)</span></label>
+          <label class="q-option"><input type="radio" name="q34_time" value="Не принципиально"><span class="q-option-marker"></span><span class="q-option-text">Не принципиально</span></label>
+        </div>
+      </div>
+
+      <div class="quiz-nav">
+        <button type="button" class="btn-prev" onclick="goPrev()">← Назад</button>
+        <button type="submit" class="btn-submit">Отправить анкету ✓</button>
+      </div>
+    </div>
+
+  </form>
+
+  <!-- ── СПАСИБО ── -->
+  <div class="quiz-thanks" id="quizThanks">
+    <div class="thanks-icon">🙌</div>
+    <h2>Спасибо за честные ответы</h2>
+    <p>Я лично прочитаю каждый и в течение <strong style="color:var(--white)">24 часов</strong> напишу тебе в Telegram или Instagram.</p>
+    <div class="highlight">
+      <strong>Ещё кое-что важное.</strong> Сейчас 5 мая. Если мы начнём работать на этой неделе — у нас есть полные <strong>12 недель до пика лета</strong>. Это реальный срок, за который твоё тело успеет измениться так, что ты сама себя не узнаешь на августовских фото.<br><br>
+      Если начнём через месяц — останется только 8 недель, и результат будет другим. Если через два — лето уже пройдёт.<br><br>
+      То, что ты прошла эту анкету и ответила на сложные вопросы, говорит о тебе больше, чем ты думаешь. Большинство просто закрывают вкладку. Ты — нет. Жду тебя в личке.
+    </div>
+    <a href="https://t.me/danikeeb" class="btn-tg" target="_blank">
+      Написать в Telegram
+    </a>
+  </div>
+
+</main>
+
+<script>
+var currentSection = 0;
+var totalSections = 7;
+
+// Init option clicks
+document.querySelectorAll('.q-option').forEach(function(opt) {
+  opt.addEventListener('click', function() {
+    var input = this.querySelector('input');
+    var isCheckbox = input.type === 'checkbox';
+    if (isCheckbox) {
+      input.checked = !input.checked;
+      this.classList.toggle('selected', input.checked);
+    } else {
+      var name = input.name;
+      document.querySelectorAll('input[name="' + name + '"]').forEach(function(r) {
+        r.closest('.q-option').classList.remove('selected');
+      });
+      input.checked = true;
+      this.classList.add('selected');
+    }
+  });
+});
+
+function updateProgress() {
+  var pct = currentSection === 0 ? 0 : Math.round((currentSection / totalSections) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  var blockNames = ['','Знакомство','Текущая реальность','Зеркало','Что мешает','Цели','Знания','Финал'];
+  document.getElementById('progressText').textContent = currentSection === 0
+    ? 'Начало' : 'Блок ' + currentSection + ' из ' + totalSections + ' · ' + blockNames[currentSection];
+}
+
+function showSection(n) {
+  document.querySelectorAll('.quiz-section').forEach(function(s) { s.classList.remove('active'); });
+  var target = document.getElementById('section-' + n);
+  if (target) { target.classList.add('active'); window.scrollTo({top: 0, behavior: 'smooth'}); }
+  currentSection = n;
+  updateProgress();
+}
+
+function goNext() {
+  if (currentSection < totalSections) showSection(currentSection + 1);
+}
+function goPrev() {
+  if (currentSection > 0) showSection(currentSection - 1);
+}
+
+function selectScale(btn, fieldId) {
+  btn.closest('.q-scale').querySelectorAll('.q-scale-btn').forEach(function(b) { b.classList.remove('selected'); });
+  btn.classList.add('selected');
+  document.getElementById(fieldId).value = btn.dataset.val;
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  var form = document.getElementById('quizForm');
+  var data = new FormData(form);
+  var json = { access_key: 'd63ad8f3-a583-4684-8107-8c955fe2a8f0', subject: '📋 Новый ответ на анкету — Даня keeb', from_name: 'Анкета keebteachyou.fit' };
+  data.forEach(function(val, key) { if (key !== 'access_key' && key !== 'subject' && key !== 'from_name' && key !== 'botcheck') json[key] = val; });
+
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(json)
+  }).finally(function() {
+    form.style.display = 'none';
+    document.getElementById('quizThanks').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+updateProgress();
+</script>
+
+</body>
+</html>
