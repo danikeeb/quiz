@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18144063990"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18144063990');
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Почему ты тренируешься, но не видишь результата? — Даня keeb</title>
@@ -798,6 +806,15 @@ function handleSubmit(e) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
     body: JSON.stringify(json)
+  }).then(function(res) {
+    if (res.ok) {
+      // Конверсия: отправка анкеты
+      gtag('event', 'conversion', {
+        'send_to': 'AW-18144063990/s9XMCNy29qgcEPbj4ctD',
+        'value': 1.0,
+        'currency': 'RUB'
+      });
+    }
   }).finally(function() {
     form.style.display = 'none';
     document.getElementById('quizThanks').classList.add('show');
